@@ -23,7 +23,7 @@ class RollingForestsEnv (gym.Env, WebInterface):
 
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low=0, high=255, shape=(880, 901, 3), dtype=np.uint8)
-        self.reward_range = (-10, 200)
+        # self.reward_range = (-10, 200)
         self.lastscore = 0
 
 
@@ -46,8 +46,8 @@ class RollingForestsEnv (gym.Env, WebInterface):
     def get_info(self):
         screen =  self.grab_screen()
         score = self.get_score()
-        scorediff = score - self.lastscore
-        reward = -3 if scorediff < 0 else scorediff
+        scorediff = (score - self.lastscore) - 1
+        reward = -5 if scorediff < -5 else scorediff
         self.lastscore = score
         return screen, scorediff, False, {"score": score}
 

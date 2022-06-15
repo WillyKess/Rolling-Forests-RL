@@ -28,7 +28,7 @@ class WebInterface:
     treeReleaseInterval -= Math.log(score) / 1000
   }
 }""")
-        self._driver.execute_script("rollingSpeed = 0.003")
+        self._driver.execute_script("rollingSpeed = 0.0015")
 
     def end(self):
         self._driver.close()
