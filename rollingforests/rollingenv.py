@@ -1,20 +1,19 @@
-from time import sleep
+# from time import sleep
 import gym
 from gym import spaces
 from webinterface import WebInterface
 import numpy as np
+# import logging
+# from PIL import Image
+# from time import asctime
+# from datetime import datetime
+import progressbar
 
 class RollingForestsEnv (gym.Env, WebInterface):
     def __init__(self):
+        # logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%H:%M:%S', filename='rollingforests.log', filemode='w')
         gym.Env.__init__(self)
         WebInterface.__init__(self)
-        # print("doing thing")
-        # print(self._driver.execute_script("return score"))
-        # self._driver.execute_script("rollingSpeed=0.004")
-
-        # init_script = "document.getElementsByClassName('runner-canvas')[0].id = 'runner-canvas'"
-        # self._driver.execute_script(init_script)
-
         self.action_dict = {0: self.jump,
                             1: self.go_left,
                             2: self.go_right,
@@ -24,33 +23,40 @@ class RollingForestsEnv (gym.Env, WebInterface):
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low=0, high=255, shape=(880, 901, 3), dtype=np.uint8)
         # self.reward_range = (-10, 200)
+        self.bar: progressbar.ProgressBar = progressbar.ProgressBar(maxval=100000, widgets=['On Step #', progressbar.SimpleProgress(), ' ', progressbar.GranularBar(), ' ', progressbar.Timer(), progressbar.AdaptiveETA()]).start()
         self.lastscore = 0
 
 
     def reset(self):
-        print("Resetting")
+        # logging.info("Resetting")
         obs = self.grab_screen()
+        self.pause()
+        # self.bar.update(0)
+        # self.bar.start_time = datetime.now()
         return obs
 
     def step(self, action):
-        # assert action in self.action_space
-        # print(action)
-        print("Stepping")
+        if self._driver.execute_script("return paused"):
+            self.pause()
+        # sleep(0.01)
         if action != 3:
             self.action_dict[action]()
-        # else:
-        #     print("Doing nothing")
-
+        # self.pause()
+        # logging.info("Stepping, action: %s", action)
+        self.bar.update(self.bar.value + 1)
         return self.get_info()
 
     def get_info(self):
         screen =  self.grab_screen()
         score = self.get_score()
         scorediff = (score - self.lastscore) - 1
-        reward = -5 if scorediff < -5 else scorediff
+        reward = scorediff / 4 if scorediff < 0 else scorediff + 0.5
         self.lastscore = score
-        return screen, scorediff, False, {"score": score}
-
+        return screen, reward, False, {"score": score}
+        # try:
+        #     return screen, reward, False, {"score": score}
+        # finally:
+        #     Image.fromarray(screen).save(f'pics/{asctime()[-13:-5]}.png')
     def get_score(self):
         score = self._driver.execute_script("return score")
         return int(score)

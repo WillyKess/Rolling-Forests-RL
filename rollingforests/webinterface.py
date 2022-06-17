@@ -21,20 +21,21 @@ class WebInterface:
             executable_path=chrome_driver_path, chrome_options=chrome_options)
         self._driver.set_window_position(x=-10, y=0)
         self._driver.get(game_url)
-        self._driver.execute_script("""doDifficultyLogic = function doDifficultyLogic() {
-  if (score === 0) {
-    treeReleaseInterval = 0.5;
-  } else if (treeReleaseInterval > 0.2) {
-    treeReleaseInterval -= Math.log(score) / 1000
-  }
-}""")
-        self._driver.execute_script("rollingSpeed = 0.0015")
+#         self._driver.execute_script("""doDifficultyLogic = function doDifficultyLogic() {
+#   if (score === 0) {
+#     treeReleaseInterval = 0.5;
+#   } else if (treeReleaseInterval > 0.2) {
+#     treeReleaseInterval -= Math.log(score) / 1000
+#   }
+# }""")
+        # self._driver.execute_script("rollingSpeed = 0.002")
 
     def end(self):
         self._driver.close()
 
     def grab_screen(self):
         screen = np.asarray(Image.open(BytesIO(base64.b64decode(self._driver.get_screenshot_as_base64()))))
+        # self.pause()
         return screen[..., :3]
 
     def go_left(self):

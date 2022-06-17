@@ -1,1 +1,4 @@
-**/a2c_rolling.zip
+**/*.zip
+*.log
+pics
+**/__pycache__
