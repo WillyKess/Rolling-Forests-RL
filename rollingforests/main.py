@@ -1,12 +1,11 @@
 from math import inf
 from rollingenv import RollingForestsEnv
 from stable_baselines3.dqn.dqn import DQN
-import progressbar
 # from stable_baselines3.common.evaluation import evaluate_policy
 # from stable_baselines3.common.env_checker import check_env
 
 # progressbar.ProgressBar(maxval=200, widgets=['On Round #', progressbar.SimpleProgress(), ' |', progressbar.GranularBar(), '| Total Time Elapsed: ', progressbar.Timer()]).start()
-env = RollingForestsEnv()
+env = RollingForestsEnv(headless=True)
 # check_env(env)
 # print(env.observation_space)
 # env = FlattenObservation(env)

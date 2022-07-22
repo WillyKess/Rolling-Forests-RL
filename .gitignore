@@ -2,3 +2,4 @@
 *.log
 pics
 **/__pycache__
+.venv
