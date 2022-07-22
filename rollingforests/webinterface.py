@@ -1,36 +1,36 @@
 from time import sleep
-from selenium import webdriver
+# from selenium import webdriver
 from io import BytesIO
 import base64
 import numpy as np
 from PIL import Image
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver import Firefox
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
 
 class WebInterface:
-    def __init__(self, game_url='https://rollingforests.rayhanadev.repl.co/', chrome_driver_path="/usr/bin/chromedriver", headless=False):
+    def __init__(self, game_url='https://rollingforests.rayhanadev.repl.co/', headless=False):
         # sleep(1)
         self.game_url = game_url
-        chrome_options = Options()
-        chrome_options.add_argument("disable-infobars")
-        chrome_options.add_argument("--mute-audio")
-        chrome_options.add_argument('--no-sandbox')
-        if headless:
-            chrome_options.headless = True
+        firefox_options = Options()
+        # chrome_options.add_argument("disable-infobars")
+        # chrome_options.add_argument("--mute-audio")
+        # chrome_options.add_argument('--no-sandbox')
+        # if headless:
+        firefox_options.headless = headless
             # chrome_options.add_argument("--disable-gpu")
-            chrome_options.add_argument("--headless")
-            chrome_options.add_argument("--screenshot")
-            chrome_options.add_argument("--window-size=800,600")
+            # chrome_options.add_argument("--headless")
+            # chrome_options.add_argument("--screenshot")
+            # chrome_options.add_argument("--window-size=800,600")
             # chrome_options.add_argument("--disable-dev-shm-usage")
             # from pyvirtualdisplay.display import Display
             # display = Display(visible=True, size=(820, 742))
             # display.start()
 
-        self._driver = webdriver.Chrome(
-            executable_path=chrome_driver_path, chrome_options=chrome_options)
+        self._driver = Firefox(options=firefox_options, service_log_path="")
         # if not headless:
-        self._driver.set_window_position(x=-10, y=0)
+        self._driver.set_window_position(x=0, y=0)
+        self._driver.set_window_size(960, 625)
         self._driver.get(game_url)
         # sleep(20)
 #         self._driver.execute_script("""doDifficultyLogic = function doDifficultyLogic() {

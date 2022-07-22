@@ -21,7 +21,7 @@ class RollingForestsEnv (gym.Env, WebInterface):
                            }
 
         self.action_space = spaces.Discrete(4)
-        shape = (600,800,3) if headless else (880, 901, 3)
+        shape = (540, 960, 3)
         self.observation_space = spaces.Box(low=0, high=255, shape=shape, dtype=np.uint8)
         # self.reward_range = (-10, 200)
         self.bar: progressbar.ProgressBar = progressbar.ProgressBar(maxval=100000, widgets=['On Step #', progressbar.SimpleProgress(), ' ', progressbar.GranularBar(), ' ', progressbar.Timer(), progressbar.AdaptiveETA()]).start()
