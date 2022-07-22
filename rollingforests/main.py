@@ -2,7 +2,7 @@ from rollingenv import RollingForestsEnv
 from stable_baselines3.dqn.dqn import DQN
 # from stable_baselines3.common.evaluation import evaluate_policy
 
-env = RollingForestsEnv(headless=True)
+env = RollingForestsEnv(headless=False)
 env.reset()
 model = DQN('MlpPolicy', env, buffer_size=5000)
 for i in range(200):

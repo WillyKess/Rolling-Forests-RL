@@ -312,7 +312,7 @@ python-versions = "*"
 
 [[package]]
 name = "selenium"
-version = "4.3.0"
+version = "4.2.0"
 description = ""
 category = "main"
 optional = false
@@ -476,7 +476,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10 <4.0.0"
-content-hash = "e547fa0f58d8270d2de6bcd12f5f591c445e9fc815f76e5daea7edf85bcfc70e"
+content-hash = "66ca428481b4b10735a5496c6e20f10043b4ff5be84a8d038c15298c5119b8cc"
 
 [metadata.files]
 async-generator = [
@@ -835,7 +835,7 @@ pytz = [
     {file = "pytz-2022.1.tar.gz", hash = "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7"},
 ]
 selenium = [
-    {file = "selenium-4.3.0-py3-none-any.whl", hash = "sha256:f67402b8f973aaa98d9c55b8f9aa63532009cd1859b2222a8b9800354942d8bc"},
+    {file = "selenium-4.2.0-py3-none-any.whl", hash = "sha256:ba5b2633f43cf6fe9d308fa4a6996e00a101ab9cb1aad6fd91ae1f3dbe57f56f"},
 ]
 setuptools-scm = [
     {file = "setuptools_scm-7.0.5-py3-none-any.whl", hash = "sha256:7930f720905e03ccd1e1d821db521bff7ec2ac9cf0ceb6552dd73d24a45d3b02"},
