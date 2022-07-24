@@ -32,15 +32,13 @@ class RollingForestsEnv (gym.Env, WebInterface):
         self.lastscore = 0
         self.stepno = 0
         self.maxscoreavg = 0
-        self.avg = MovingAverage(10)
+        self.avg = MovingAverage(20)
         self.batchno = 0
     def reset(self):
         obs = self.grab_screen()
         self.pause()
-        if self.batchno == 0:
-            self.batchno += 1
-            return obs
-        print(f"({strftime('%I:%M %p')}): Starting Batch #{self.batchno}!")
+        if self.batchno % 2 == 0:
+            print(f"({strftime('%I:%M %p')}): Starting Batch #{int(self.batchno / 2) + 1}, Last Batch's Average Score: {self.maxscoreavg}")
         self.batchno += 1
         return obs
 

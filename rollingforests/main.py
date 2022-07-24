@@ -3,7 +3,7 @@ from stable_baselines3.dqn.dqn import DQN
 # from stable_baselines3.common.evaluation import evaluate_policy
 from signal import signal, SIGINT
 
-env = RollingForestsEnv(headless=True)
+env = RollingForestsEnv(headless=False)
 env.reset()
 model = DQN('MlpPolicy', env, buffer_size=10000)
 # model = DQN.load('dqn_rolling', env=env, buffer_size=5000)
