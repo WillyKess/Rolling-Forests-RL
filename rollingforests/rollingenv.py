@@ -2,7 +2,21 @@ import gym
 from gym import spaces
 from webinterface import WebInterface
 import numpy as np
-import progressbar
+from time import strftime
+
+
+class MovingAverage(object):
+    def __init__(self, size: int):
+        self.size = size
+        self.queue = []
+
+    def next(self, val):
+        if not self.queue or len(self.queue) < self.size:
+            self.queue.append(val)
+        else:
+            self.queue.pop(0)
+            self.queue.append(val)
+        return int(sum(self.queue) / len(self.queue))
 
 class RollingForestsEnv (gym.Env, WebInterface):
     def __init__(self, headless=False):
@@ -16,12 +30,18 @@ class RollingForestsEnv (gym.Env, WebInterface):
         shape = (540, 960, 3)
         self.observation_space = spaces.Box(low=0, high=255, shape=shape, dtype=np.uint8)
         self.lastscore = 0
-        self.highscore = 0
-        self.bar: progressbar.ProgressBar = progressbar.ProgressBar(maxval=100000, widgets=['Step #', progressbar.SimpleProgress(), ' ', progressbar.GranularBar(), ' ', progressbar.Timer(), '', progressbar.AdaptiveETA()]).start()
-
+        self.stepno = 0
+        self.maxscoreavg = 0
+        self.avg = MovingAverage(10)
+        self.batchno = 0
     def reset(self):
         obs = self.grab_screen()
         self.pause()
+        if self.batchno == 0:
+            self.batchno += 1
+            return obs
+        print(f"({strftime('%I:%M %p')}): Starting Batch #{self.batchno}!")
+        self.batchno += 1
         return obs
 
     def step(self, action):
@@ -29,16 +49,20 @@ class RollingForestsEnv (gym.Env, WebInterface):
             self.pause()
         if action != 3:
             self.action_dict[action]()
-        self.bar.update(self.bar.value + 1)
-        return self.get_info()
+        tempscore = self.lastscore
+        info = self.get_info()
+        if self.lastscore < tempscore:
+            self.maxscoreavg = self.avg.next(tempscore)
+        print(f"Step #{self.stepno},    Average Max Score: {self.maxscoreavg}", end = '\r')
+        self.stepno += 1
+        return info
 
     def get_info(self):
         screen =  self.grab_screen()
         score = self.get_score()
         scorediff = (score - self.lastscore) - 1
-        reward = scorediff / 4 if scorediff < 0 else scorediff + 0.5
+        reward = -5 if scorediff < 0 else scorediff + 0.1
         self.lastscore = score
-        self.highscore = self._driver.execute_script("return highScore")
         return screen, reward, False, {"score": score}
 
     def get_score(self):
